@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Startup Idea Validator - AI-Powered Validation</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- 
+    ============================================
+    HEADER SECTION
+    ============================================
+    -->
+    <header class="header">
+        <div class="container header-inner">
+            <div>
+                <div class="logo">
+                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+                        <path d="M16 2L2 9L16 16L30 9L16 2Z" fill="#6366f1"/>
+                        <path d="M2 23L16 30L30 23V9L16 16L2 9V23Z" fill="#8b5cf6"/>
+                    </svg>
+                    <h1>Startup Idea Validator</h1>
+                </div>
+                <div class="header-subtitle">
+                    AI-Powered Validation Using Gemini, Serper &amp; Firecrawl
+                </div>
+            </div>
+
+            <!-- Right-side actions -->
+            <div class="header-actions">
+                <button class="btn btn-secondary" id="real-user-validate-btn">
+                    👥 Validate From Real Users
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- 
+    ============================================
+    MAIN CONTAINER
+    ============================================
+    -->
+    <main class="main-container">
+        <div class="container">
+            
+            <!-- 
+            ==========================================
+            SECTION 1: INPUT FORM (Initial State)
+            ==========================================
+            User fills this form with all startup details
+            -->
+            <section id="input-section" class="section active">
+                <div class="section-header">
+                    <h2>🚀 Validate Your Startup Idea</h2>
+                    <p>Provide complete details about your startup idea. Our AI will analyze competitors, market potential, and provide actionable insights.</p>
+                </div>
+
+                <form id="idea-form" class="idea-form">
+                    <div class="form-grid">
+                        
+                        <!-- Basic Information -->
+                        <div class="form-group full-width">
+                            <label for="idea_name">💡 Startup Idea Name *</label>
+                            <input 
+                                type="text" 
+                                id="idea_name" 
+                                name="idea_name" 
+                                required 
+                                placeholder="e.g., EcoTrack - Carbon Footprint Tracker"
+                            >
+                        </div>
+
+                        <div class="form-group full-width">
+                            <label for="problem">❓ Problem Statement *</label>
+                            <textarea 
+                                id="problem" 
+                                name="problem" 
+                                rows="3" 
+                                required 
+                                placeholder="What specific problem are you solving? Be clear and concise."
+                            ></textarea>
+                        </div>
+
+                        <div class="form-group full-width">
+                            <label for="why_problem_exists">🔍 Why Does This Problem Exist? *</label>
+                            <textarea 
+                                id="why_problem_exists" 
+                                name="why_problem_exists" 
+                                rows="3" 
+                                required 
+                                placeholder="What are the root causes? Why hasn't this been solved effectively?"
+                            ></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="target_audience">🎯 Target Audience *</label>
+                            <input 
+                                type="text" 
+                                id="target_audience" 
+                                name="target_audience" 
+                                required 
+                                placeholder="e.g., Environmentally conscious millennials, ages 25-40"
+                            >
+                        </div>
+
+                        <div class="form-group">
+                            <label for="market">🏢 Market / Industry *</label>
+                            <input 
+                                type="text" 
+                                id="market" 
+                                name="market" 
+                                required 
+                                placeholder="e.g., Environmental Technology, SaaS, FinTech"
+                            >
+                        </div>
+
+                        <!-- Solution Details -->
+                        <div class="form-group full-width">
+                            <label for="solution">✨ Proposed Solution *</label>
+                            <textarea 
+                                id="solution" 
+                                name="solution" 
+                                rows="4" 
+                                required 
+                                placeholder="Describe your solution in detail. How does it solve the problem?"
+                            ></textarea>
+                        </div>
+
+                        <div class="form-group full-width">
+                            <label for="key_features">⚙ Key Features *</label>
+                            <textarea 
+                                id="key_features" 
+                                name="key_features" 
+                                rows="3" 
+                                required 
+                                placeholder="List the main features of your solution (e.g., AI analysis, mobile app, real-time tracking)"
+                            ></textarea>
+                        </div>
+
+                        <div class="form-group full-width">
+                            <label for="uniqueness">🌟 What Makes It Unique? *</label>
+                            <textarea 
+                                id="uniqueness" 
+                                name="uniqueness" 
+                                rows="3" 
+                                required 
+                                placeholder="What sets you apart from competitors? Your unique value proposition."
+                            ></textarea>
+                        </div>
+
+                        <!-- Business Model -->
+                        <div class="form-group">
+                            <label for="revenue_model">💰 Revenue Model *</label>
+                            <input 
+                                type="text" 
+                                id="revenue_model" 
+                                name="revenue_model" 
+                                required 
+                                placeholder="e.g., Subscription ($9.99/month), Freemium, Advertising"
+                            >
+                        </div>
+
+                        <div class="form-group">
+                            <label for="expected_users">👥 Expected Users *</label>
+                            <input 
+                                type="text" 
+                                id="expected_users" 
+                                name="expected_users" 
+                                required 
+                                placeholder="e.g., 100K users in Year 1, 1M in Year 3"
+                            >
+                        </div>
+
+                        <div class="form-group">
+                            <label for="region">🌍 Region / Country *</label>
+                            <input 
+                                type="text" 
+                                id="region" 
+                                name="region" 
+                                required 
+                                placeholder="e.g., United States, Europe, Global"
+                            >
+                        </div>
+
+                        <!-- Additional Notes -->
+                        <div class="form-group full-width">
+                            <label for="extra_notes">📝 Extra Notes (Optional)</label>
+                            <textarea 
+                                id="extra_notes" 
+                                name="extra_notes" 
+                                rows="3" 
+                                placeholder="Any additional context, assumptions, or information you'd like to share"
+                            ></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary" id="submit-btn">
+                            <span class="btn-text">🚀 Validate My Idea</span>
+                            <span class="btn-loader" style="display: none;">
+                                <svg class="spinner" viewBox="0 0 50 50">
+                                    <circle class="path" cx="25" cy="25" r="20" fill="none" stroke-width="5"></circle>
+                                </svg>
+                            </span>
+                        </button>
+                    </div>
+                </form>
+            </section>
+
+            <!-- 
+            ==========================================
+            SECTION 2: LOADING STATE
+            ==========================================
+            Shows progress while validation is running
+            -->
+            <section id="loading-section" class="section" style="display: none;">
+                <div class="loading-container">
+                    <div class="loading-spinner">
+                        <svg class="spinner-large" viewBox="0 0 50 50">
+                            <circle class="path" cx="25" cy="25" r="20" fill="none" stroke-width="5"></circle>
+                        </svg>
+                    </div>
+                    <h2>🤖 Validating Your Startup Idea...</h2>
+                    <p id="loading-status">This may take 30-60 seconds...</p>
+                    
+                    <!-- Progress Steps -->
+                    <div class="progress-steps">
+                        <div class="step active" id="step1">
+                            <div class="step-icon">1</div>
+                            <div class="step-text">Processing Input</div>
+                        </div>
+                        <div class="step" id="step2">
+                            <div class="step-icon">2</div>
+                            <div class="step-text">Web Research</div>
+                        </div>
+                        <div class="step" id="step3">
+                            <div class="step-icon">3</div>
+                            <div class="step-text">AI Analysis</div>
+                        </div>
+                        <div class="step" id="step4">
+                            <div class="step-icon">4</div>
+                            <div class="step-text">Final Report</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 
+            ==========================================
+            SECTION 3: RESULTS DISPLAY
+            ==========================================
+            Shows the validation report
+            -->
+            <section id="results-section" class="section" style="display: none;">
+                <div class="results-header">
+                    <h2>📊 Validation Report</h2>
+                    <div style="display: flex; gap: 0.75rem;">
+                        <button class="btn btn-secondary" id="new-validation-btn">🔄 New Validation</button>
+                        <button class="btn btn-primary" id="next-step-btn">Next ➜</button>
+                    </div>
+                </div>
+                <div class="results-content" id="results-content">
+                    <!-- Results will be dynamically inserted here by JavaScript -->
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <!-- 
+    ============================================
+    FOOTER
+    ============================================
+    -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 Startup Idea Validator. Powered by Google Gemini AI, Serper, and Firecrawl.</p>
+        </div>
+    </footer>
+
+    <!-- 
+    ============================================
+    JAVASCRIPT
+    ============================================
+    -->
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Comment-Driven Idea Validator</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #020617;
+      --bg-card: #020617;
+      --bg-soft: #0b1120;
+      --accent: #6366f1;
+      --accent-soft: rgba(99, 102, 241, 0.16);
+      --border-subtle: rgba(148, 163, 184, 0.4);
+      --text-main: #e5e7eb;
+      --text-muted: #9ca3af;
+      --radius-xl: 20px;
+      --shadow-soft: 0 18px 40px rgba(15, 23, 42, 0.7);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      padding: 32px 16px 40px;
+      font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      background:
+        radial-gradient(circle at top left, #1f2937 0, transparent 50%),
+        radial-gradient(circle at bottom right, #0b1120 0, transparent 60%),
+        var(--bg);
+      color: var(--text-main);
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+    }
+
+    .shell { width: 100%; max-width: 950px; }
+
+    .app-card {
+      background: radial-gradient(circle at top, #020617 0, #020617 55%);
+      border-radius: 28px;
+      padding: 24px 22px 26px;
+      box-shadow: var(--shadow-soft);
+      border: 1px solid var(--border-subtle);
+      backdrop-filter: blur(18px);
+    }
+
+    /* Header */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      padding: 4px 9px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(148, 163, 184, 0.6);
+      color: var(--text-muted);
+    }
+    .badge-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: #22c55e;
+      box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.3);
+    }
+    h1 { margin: 6px 0 4px; font-size: 22px; font-weight: 600; }
+    .subtitle { margin: 0; font-size: 13px; color: var(--text-muted); }
+
+    .app-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 18px;
+      margin-bottom: 22px;
+    }
+
+    .app-meta {
+      text-align: right;
+      color: var(--text-muted);
+      font-size: 12px;
+    }
+
+    /* Form */
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: 14px;
+      border: 1px solid var(--border-subtle);
+      background: rgba(15, 23, 42, 0.92);
+      color: var(--text-main);
+      font-size: 13px;
+      outline: none;
+    }
+    input[type="text"]::placeholder { color: #6b7280; }
+
+    .form-footer {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .btn {
+      padding: 8px 14px;
+      font-size: 13px;
+      border-radius: 999px;
+      cursor: pointer;
+      border: none;
+    }
+    .btn-secondary {
+      background: rgba(15, 23, 42, 0.9);
+      color: var(--text-main);
+      border: 1px solid rgba(148, 163, 184, 0.6);
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, #6366f1, #8b5cf6);
+      color: #fff;
+    }
+
+    /* Sections */
+    .section {
+      background: linear-gradient(145deg, var(--bg-soft), #020617);
+      border: 1px solid rgba(148, 163, 184, 0.3);
+      border-radius: var(--radius-xl);
+      padding: 16px;
+      margin-top: 20px;
+    }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.09em;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+    .section-title-pill {
+      background: var(--accent-soft);
+      color: var(--accent);
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      font-size: 11px;
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    ul { list-style: none; padding-left: 0; margin-top: 6px; }
+    li {
+      padding: 6px 0;
+      border-bottom: 1px solid rgba(55, 65, 81, 0.6);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+    li:last-child { border-bottom: none; }
+
+    .muted { color: var(--text-muted); font-size: 12px; }
+    .score { font-size: 26px; font-weight: 600; }
+
+    .error-box {
+      padding: 10px 12px;
+      border-radius: 14px;
+      background: rgba(239, 68, 68, 0.1);
+      border: 1px solid rgba(239, 68, 68, 0.4);
+      color: #fecaca;
+      margin-top: 12px;
+      font-size: 13px;
+    }
+
+    a { color: #93c5fd; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    h3 { margin: 0 0 4px; font-size: 16px; }
+    h4 { margin: 10px 0 4px; font-size: 14px; }
+  </style>
+
+</head>
+
+<body>
+  <div class="shell">
+    <div class="app-card">
+
+      <!-- HEADER -->
+      <div class="app-header">
+        <div>
+          <div class="badge">
+            <span class="badge-dot"></span>
+            COMMENT-DRIVEN VALIDATION
+          </div>
+          <h1>Idea Validator</h1>
+          <p class="subtitle">Paste your Reddit/X post → fetch comments → analyze with Gemini.</p>
+        </div>
+        <div class="app-meta">
+          Reddit / X<br>
+          Powered by Gemini
+        </div>
+      </div>
+
+      <!-- FORM -->
+      <form method="POST">
+        <input
+          type="text"
+          name="post_url"
+          placeholder="Paste Reddit or X/Twitter post URL"
+          value="{{ post_url or '' }}"
+        >
+
+        <div class="form-footer">
+          <button class="btn btn-secondary" type="submit" name="action" value="fetch">
+            💬 Fetch comments
+          </button>
+
+          {% if results %}
+            <button class="btn btn-primary" type="submit" name="action" value="analyze">
+              ⚡ Start analysis
+            </button>
+          {% endif %}
+        </div>
+      </form>
+
+      {% if error %}
+        <div class="error-box">{{ error }}</div>
+      {% endif %}
+
+      <!-- RESULTS SECTION -->
+      {% if results %}
+        <!-- 1. POST INFO -->
+        <div class="section">
+          <div class="section-title">
+            <span class="section-title-pill">1</span>
+            Post snapshot
+          </div>
+
+          {% if results.platform == "reddit" %}
+            <h3>{{ results.post_title }}</h3>
+            <p class="muted">
+              {{ results.subreddit }} · Views: {{ results.view_count }} · Comments: {{ results.total_comments }}
+            </p>
+            {% if results.post_text %}
+              <p>{{ results.post_text }}</p>
+            {% endif %}
+          {% else %}
+            <h3>{{ results.author_name }} <span class="muted">@{{ results.author_username }}</span></h3>
+            <p class="muted">
+              Likes: {{ results.likes }} · Comments: {{ results.total_comments }} · {{ results.created_at }}
+            </p>
+            <p>{{ results.text }}</p>
+          {% endif %}
+
+          <p class="muted">
+            Source: <a href="{{ results.url }}" target="_blank">Open post</a>
+          </p>
+        </div>
+
+        <!-- 2. RAW COMMENTS -->
+        <div class="section">
+          <div class="section-title">
+            <span class="section-title-pill">2</span>
+            Raw comments (preview)
+          </div>
+
+          {% if results.comments %}
+            <ul>
+              {% for c in results.comments %}
+                <li>
+                  {% if results.platform == "reddit" %}
+                    <strong>{{ c.author }}</strong> · {{ c.score }} upvotes<br>
+                    <span class="muted">{{ c.created_utc }}</span><br>
+                    {{ c.body }}
+                  {% else %}
+                    <strong>{{ c.name }}</strong>
+                    <span class="muted">@{{ c.username }}</span> · Likes: {{ c.likes }}<br>
+                    <span class="muted">{{ c.created_utc }}</span><br>
+                    {{ c.text }}
+                  {% endif %}
+                </li>
+              {% endfor %}
+            </ul>
+          {% else %}
+            <p class="muted">No comments found.</p>
+          {% endif %}
+        </div>
+
+        <!-- 3. GEMINI ANALYSIS -->
+        {% if analysis %}
+          <div class="section">
+            <div class="section-title">
+              <span class="section-title-pill">3</span>
+              Gemini analysis
+            </div>
+
+            <!-- Scores -->
+            <div style="display:flex; gap:24px; flex-wrap:wrap; margin-bottom:10px;">
+              <div>
+                <p class="muted">Idea validation score</p>
+                <div class="score">{{ analysis.validation_score }}</div>
+              </div>
+              <div>
+                <p class="muted">Entry barrier score</p>
+                <div class="score">{{ analysis.entry_barrier_score }}</div>
+              </div>
+            </div>
+
+            <!-- Your idea -->
+            <h4>Your idea</h4>
+            <p class="muted">{{ analysis.idea }}</p>
+
+            <!-- Painful problem -->
+            <h4>Solves this painful problem</h4>
+            <p class="muted">{{ analysis.problem_pain }}</p>
+
+            <!-- Competitors -->
+            <h4>Existing competitors & their differentiations</h4>
+            {% if analysis.competitors %}
+              <ul>
+                {% for comp in analysis.competitors %}
+                  <li>
+                    <strong>{{ comp.name }}</strong><br>
+                    <span class="muted">Differentiation:</span> {{ comp.differentiation }}<br>
+                    <span class="muted">Approx. revenue / size:</span> {{ comp.approx_revenue }}
+                  </li>
+                {% endfor %}
+              </ul>
+            {% else %}
+              <p class="muted">No clear competitors detected from comments.</p>
+            {% endif %}
+
+            <!-- Your differentiation -->
+            <h4>Your differentiation</h4>
+            <p class="muted">{{ analysis.your_differentiation }}</p>
+
+            <!-- Strengths / Weaknesses -->
+            <div style="display:flex; flex-wrap:wrap; gap:16px; margin-top:10px;">
+              <div style="flex:1 1 220px;">
+                <h4>Your strengths</h4>
+                {% if analysis.strengths %}
+                  <ul>
+                    {% for s in analysis.strengths %}
+                      <li>{{ s }}</li>
+                    {% endfor %}
+                  </ul>
+                {% else %}
+                  <p class="muted">No strengths detected.</p>
+                {% endif %}
+              </div>
+
+              <div style="flex:1 1 220px;">
+                <h4>Your weaknesses</h4>
+                {% if analysis.weaknesses %}
+                  <ul>
+                    {% for w in analysis.weaknesses %}
+                      <li>{{ w }}</li>
+                    {% endfor %}
+                  </ul>
+                {% else %}
+                  <p class="muted">No weaknesses detected.</p>
+                {% endif %}
+              </div>
+            </div>
+
+            <!-- Pros / Cons -->
+            <div style="display:flex; flex-wrap:wrap; gap:16px; margin-top:10px;">
+              <div style="flex:1 1 220px;">
+                <h4>Pros (market signal)</h4>
+                {% if analysis.pros %}
+                  <ul>
+                    {% for p in analysis.pros %}
+                      <li>{{ p }}</li>
+                    {% endfor %}
+                  </ul>
+                {% else %}
+                  <p class="muted">No pros detected.</p>
+                {% endif %}
+              </div>
+
+              <div style="flex:1 1 220px;">
+                <h4>Cons / risks</h4>
+                {% if analysis.cons %}
+                  <ul>
+                    {% for c in analysis.cons %}
+                      <li>{{ c }}</li>
+                    {% endfor %}
+                  </ul>
+                {% else %}
+                  <p class="muted">No cons detected.</p>
+                {% endif %}
+              </div>
+            </div>
+
+            <!-- Summary + advice -->
+            <h4 style="margin-top:14px;">Overall summary</h4>
+            <p class="muted">{{ analysis.summary }}</p>
+
+            <h4 style="margin-top:14px;">Suggested next steps</h4>
+            <p class="muted">{{ analysis.advice }}</p>
+          </div>
+        {% endif %}
+      {% endif %}
+
+    </div>
+  </div>
+</body>
+</html>
